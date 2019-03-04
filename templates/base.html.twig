@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock title %}</title>
+    <meta name="description" content="{% block meta_description %}{% endblock meta_description %}"/>
+
+    <meta property="og:title" content="{% block og_title %}{% endblock og_title %}">
+    <meta property="og:site_name" content="Remote Vacancy">
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:site" content="@remote_vacancy">
+    <meta property="og:description" content="{% block og_description %}{% endblock og_description %}">
+    <meta property="og:image" content="{% block og_image %}{{ app.request.schemeAndHttpHost ~ 'img/favicon.png' }}{% endblock og_image %}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+</head>
+<body>
+<nav class="navbar is-fixed-top">
+    <div class="container">
+        <div class="navbar-brand">
+            <div class="navbar-item logo-block">
+                <a href="{{ path('homepage') }}"><strong>REMOTE JOBS</strong></a>
+            </div>
+            <div class="navbar-burger burger" data-target="main-navbar">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div id="main-navbar" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="https://twitter.com/remote_vacancy" target="_blank">
+                    <i class="fab fa-twitter is-large"></i>&nbsp;
+                    Follow us
+                </a>
+            </div>
+            <div class="navbar-end">
+                <a class="navbar-item" href="mailto:welcome@remotevacancy.com">
+                    welcome@remotevacancy.com
+                </a>
+                <div class="navbar-item">
+                    <form action="{{ path('search') }}" method="get">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input value="{{ app.request.get('word') }}" name="word" class="input" type="text" placeholder="css, php, javascript…">
+                            </div>
+                            <div class="control">
+                                <button type="submit" class="button is-link">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+{% for label, flashes in app.session.flashbag.all %}
+    {% for flash in flashes %}
+        <div class="message is-{{ label }}">
+            <div class="message-header">
+                <p>{{ label }}</p>
+                <button class="delete" aria-label="delete"></button>
+            </div>
+            <div class="message-body">
+                {{ flash }}
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}
+<div class="wrapper">
+    {% block content %}
+    {% endblock content %}
+</div>
+<footer class="footer">
+    <div class="container">
+        <div class="content has-text-centered">
+            <p>
+                <b>Remote jobs</b> Copyright © {{ 'now'|date('Y') }}
+            </p>
+        </div>
+    </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+        if ($navbarBurgers.length > 0) {
+            $navbarBurgers.forEach(function ($el) {
+                $el.addEventListener('click', function () {
+                    var target = $el.dataset.target;
+                    var $target = document.getElementById(target);
+                    $el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+
+                });
+            });
+        }
+    });
+
+    $('.delete').on('click', function () {
+        $('.message').hide();
+    })
+</script>
+</body>
+</html>

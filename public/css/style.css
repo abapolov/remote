@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.wrapper {
+    flex: 1;
+}
+
+.navbar {
+    box-shadow: 0 0px 10px #d2cfcf;
+}
+
+.job-title {
+    color: #3d3d3d;
+}
+
+.job-title span {
+    color: #ff3860;
+    text-decoration: underline;
+}
+
+.job-title small{
+    color: #9e9d9d;
+}

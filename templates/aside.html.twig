@@ -1,0 +1,17 @@
+<div class="column is-one-fifth">
+    <nav class="panel">
+        <p class="panel-block">
+            <b>Categories</b>
+        </p>
+        {% for category in categories %}
+            {% if category.jobs|length > 0 %}
+                <a href="{{ path('category_view', { 'slug': category.slug, 'page': 1 }) }}" class="panel-block {% if app.request.get('slug') == category.slug %}is-active{% endif %}">
+                    <span class="panel-icon">
+                        <i class="{{ category.iconClass }}"></i>
+                    </span>
+                    {{ category.name }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </nav>
+</div>

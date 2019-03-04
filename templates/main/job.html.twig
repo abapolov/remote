@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ job.title }}{% endblock title %}
+{% block og_title %}{{ job.title }}{% endblock og_title %}
+{% block og_description %}{{ job.description|striptags[0:255] ~ '...' }}{% endblock og_description %}
+{% block og_image %}
+    {% if job.company.logoPath %}
+        {{ job.company.logoPath }}
+    {% else %}
+        {{ app.request.schemeAndHttpHost ~ 'img/favicon.png' }}
+    {% endif %}
+{% endblock og_image %}
+
+{% block content %}
+    <section class="section custom-padding">
+        <div class="container">
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li>
+                        <a href="{{ path('homepage') }}">
+                            <span class="icon is-small"><i class="fas fa-home"></i></span><span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('category_view', { 'slug': job.category.slug, 'page': 1 }) }}">
+                            <span class="icon is-small">
+                                <i class="fas fa-code"></i>
+                            </span>
+                            <span>{{ job.category.name }}</span>
+                        </a>
+                    </li>
+                    <li class="is-active"><a href="#" aria-current="page">{{ job.title }}</a></li>
+                </ul>
+            </nav>
+            <div class="columns reverse-row-order">
+                <div class="column">
+                    <nav class="panel">
+                        <div class="panel-block">
+                            {% if job.company.logoPath %}
+                                <img class="image is-128x128 company-logo" src="{{ job.company.logoPath }}" alt="{{ job.company.name }}">
+                            {% else %}
+                                <img class="image is-128x128 company-logo" src="{{ job.source.logoPath }}" alt="{{ job.company.name }}">
+                            {% endif %}
+                        </div>
+                        {% set url = 'javascript:void(0);' %}
+
+                        {% if job.company.siteUrl %}
+                            {% set url = job.company.siteUrl %}
+                        {% endif %}
+
+                        <a href="{{ url }}" target="_blank" class="panel-block">
+                            <span class="panel-icon">
+                              <i class="fas fa-mouse-pointer"></i>
+                            </span>
+                            <b>{{ job.company.name }}</b>
+                        </a>
+                        <a class="panel-block">
+                            <span class="panel-icon">
+                              <i class="fas fa-envelope-square"></i>
+                            </span>
+                            Tell a friend
+                        </a>
+                        <a class="panel-block">
+                            <span class="panel-icon">
+                              <i class="fab fa-twitter-square"></i>
+                            </span>
+                            Tweet this job
+                        </a>
+                        <a class="panel-block">
+                            <span class="panel-icon">
+                              <i class="fab fa-linkedin-in"></i>
+                            </span>
+                            Post on LinkedIn
+                        </a>
+                    </nav>
+                </div>
+                <div class="column is-four-fifths">
+                    <h1 class="title">{{ job.title }}</h1>
+                    <div class="subtitle">POSTED {{ job.createdAt|date('d M Y') }}</div>
+                    <div class="content">
+                        <h2 class="title is-size-4">DESCRIPTION</h2>
+                        {{ job.description|raw }}
+                        {% if job.applyDescription %}
+                            <h2 class="title is-size-4">APPLY</h2>
+                            {{ job.applyDescription|raw }}
+                        {% endif %}
+                    </div>
+                    <div class="hero is-light">
+                        <div class="hero-body">
+                            <h3 class="is-size-5">Apply for this position:</h3>
+                            <p>
+                                Please apply at the following page: <a target="_blank" class="custom-link" href="{{ job.applyUrl }}">Apply</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav class="level">
+                <div class="level-left">
+                    <p class="level-item">
+                        <a href="{{ path('homepage') }}" class="">
+                            ← Back to all jobs
+                        </a>
+                    </p>
+                </div>
+                <div class="level-right">
+                    <p class="level-item">
+                        <a href="{{ path('category_view', { 'slug': job.category.slug, 'page': 1 }) }}" class="">
+                            See more {{ job.category.name }} jobs →
+                        </a>
+                    </p>
+                </div>
+            </nav>
+        </div>
+    </section>
+{% endblock content %}

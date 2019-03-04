@@ -1,0 +1,41 @@
+{% if pageCount > 1 %}
+    <div class="panel-block">
+        <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
+            {% if previous is defined %}
+                <a href="{{ path(route, query|merge({(pageParameterName): previous})) }}" class="pagination-previous">Previous</a>
+            {% endif %}
+
+            {% if next is defined %}
+                <a href="{{ path(route, query|merge({(pageParameterName): next})) }}" class="pagination-next">Next page</a>
+            {% endif %}
+
+            <ul class="pagination-list">
+                {% if first is defined and current != first and (current - 1) != first %}
+                    <li>
+                        <a href="{{ path(route, query|merge({(pageParameterName): first})) }}" class="pagination-link" aria-label="Goto page 1">{{ first }}</a>
+                    </li>
+                    <li><span class="pagination-ellipsis">&hellip;</span></li>
+                {% endif %}
+
+                {% for page in pagesInRange %}
+                    {% if page != current %}
+                        <li>
+                            <a href="{{ path(route, query|merge({(pageParameterName): page})) }}" class="pagination-link" aria-label="Goto page {{ page }}">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a class="pagination-link is-current" aria-label="Page {{ page }}">{{ page }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if last is defined and current != last and (current + 1) != last %}
+                    <li><span class="pagination-ellipsis">&hellip;</span></li>
+                    <li>
+                        <a href="{{ path(route, query|merge({(pageParameterName): last})) }}" class="pagination-link" aria-label="Goto page 86">{{ last }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endif %}

@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Remote Jobs: Design, Programming, Support, Executive, Marketing, Copywriting, and more.{% endblock title %}
+{% block og_title %}Remote Jobs: Design, Programming, Support, Executive, Marketing, Copywriting, and more.{% endblock og_title %}
+{% block meta_description %}Find a remote jobs of different kinds. Design, Programming, Support, Executive, Marketing, Copywriting, and more. New jobs every day. Best solution for find remote work. Work remotely - leave a gray office.{% endblock meta_description %}
+{% block og_description %}Find a remote jobs of different kinds. Design, Programming, Support, Executive, Marketing, Copywriting, and more. New jobs every day. Best solution for find remote work. Work remotely - leave a gray office.{% endblock og_description %}
+{% block og_image %}{{ app.request.schemeAndHttpHost ~ 'img/favicon.png' }}{% endblock og_image %}
+
+{% block content %}
+    <section class="section custom-padding">
+        <div class="container">
+            <div class="columns">
+                {{ render(controller('App\\Controller\\MainController::renderAsideCategoriesBar')) }}
+
+                <div class="column">
+                    {% for category in categories %}
+                        <div class="panel">
+                            <div class="panel-block">
+                                <div class="media">
+                                    <div class="media-content">
+                                        <span class="is-size-3">
+                                            <i class="{{ category.iconClass }}"></i>
+                                            {{ category.name }}
+                                        </span>
+                                        <small>LAST UPDATE {{ category.updatedAt|date('H:i d/M/Y') }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for job in lastJobs(category.id) %}
+                                <div class="panel-block">
+                                    <div class="media">
+                                        <figure class="media-left">
+                                            <p class="image is-64x64">
+                                                {% if job.company.logoPath %}
+                                                    <img src="{{ job.company.logoPath }}">
+                                                {% else %}
+                                                    <img src="{{ job.source.logoPath }}">
+                                                {% endif %}
+                                            </p>
+                                        </figure>
+                                        <div class="media-content">
+                                            <div class="content">
+                                                <div class="is-size-4">
+                                                    <a href="{{ path('job_view', { 'slug': job.slug }) }}" class="job-title">
+                                                        <b>{{ job.company.name }} -</b> <span>{{ job.title }}</span> <small>{{ job.source.name }}</small>
+                                                    </a>
+                                                </div>
+                                                <br>
+                                                {{ job.description|striptags[0:200] ~ '...' }}
+                                            </div>
+                                        </div>
+                                        <div class="media-right">
+                                            {{ job.createdAt|date('d M Y') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="panel-block">
+                                <a href="{{ path('category_view', { 'slug': category.slug, 'page': 1 }) }}" class="bottom-link">
+                                    <b>
+                                        View all {{ categoryJobsCount(category.id) }} {{ category.name }} jobs →
+                                    </b>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
